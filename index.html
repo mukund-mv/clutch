@@ -20,14 +20,13 @@
       font-weight: 900;
       letter-spacing: 1px;
     }
-    header {
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(10px);
+    header, #workshops {
+      background: rgba(0, 0, 0, 0.474);
     }
     .glass {
-      background: rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       transition: transform 0.3s ease;
     }
     .glass:hover {
@@ -42,10 +41,8 @@
   </style>
 </head>
 <body>
-  <!-- 3D Background -->
   <canvas id="bgCanvas"></canvas>
 
-  <!-- Navbar -->
   <header class="fixed top-0 left-0 w-full py-4 px-8 flex justify-between items-center z-50">
     <h1 class="text-3xl font-bold text-white">Robotics Academy</h1>
     <nav class="space-x-6 text-lg">
@@ -55,7 +52,6 @@
     </nav>
   </header>
 
-  <!-- Hero Section -->
   <section class="h-screen flex flex-col justify-center items-center text-center">
     <h2 class="text-6xl md:text-7xl font-extrabold mb-6">Building Future Innovators</h2>
     <p class="max-w-2xl mx-auto text-lg text-gray-300 mb-8">
@@ -64,7 +60,6 @@
     <a href="#programs" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 rounded-full text-black font-bold text-lg shadow-lg transition">Get Started</a>
   </section>
 
-  <!-- Programs -->
   <section id="programs" class="py-24 px-8">
     <h3 class="text-4xl font-bold mb-12 text-center">Programs</h3>
     <div class="grid md:grid-cols-3 gap-10">
@@ -83,8 +78,7 @@
     </div>
   </section>
 
-  <!-- Workshops -->
-  <section id="workshops" class="py-24 px-8 bg-gradient-to-t from-black to-gray-900">
+  <section id="workshops" class="py-24 px-8">
     <h3 class="text-4xl font-bold mb-12 text-center">Workshops</h3>
     <div class="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
       <div class="glass p-6 rounded-2xl">
@@ -105,7 +99,6 @@
     </div>
   </section>
 
-  <!-- About -->
   <section id="about" class="py-24 px-8 max-w-5xl mx-auto text-center">
     <h3 class="text-4xl font-bold mb-6">About Us</h3>
     <p class="text-gray-300 mb-6">
@@ -114,13 +107,11 @@
     <a href="#contact" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 rounded-full text-black font-bold text-lg">Join Now</a>
   </section>
 
-  <!-- Footer -->
   <footer class="py-6 text-center text-gray-400 bg-black/80">
     © 2025 Robotics Academy. All rights reserved.
   </footer>
 
   <script>
-    // Floating particle background
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({canvas: document.getElementById('bgCanvas'), alpha:true});
