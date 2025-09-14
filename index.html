@@ -6,6 +6,7 @@
   <title>Robotics Academy</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
   <style>
@@ -21,16 +22,17 @@
       letter-spacing: 1px;
     }
     header, #workshops {
-      background: rgba(0, 0, 0, 0.474);
+      background: rgba(0, 0, 0, 0.45);
     }
     .glass {
       background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .glass:hover {
       transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,255,255,0.2);
     }
     canvas#bgCanvas {
       position: fixed;
@@ -43,16 +45,18 @@
 <body>
   <canvas id="bgCanvas"></canvas>
 
+  <!-- NAVBAR -->
   <header class="fixed top-0 left-0 w-full py-4 px-8 flex justify-between items-center z-50">
     <h1 class="text-3xl font-bold text-white">Robotics Academy</h1>
     <nav class="space-x-6 text-lg">
-      <a href="#programs" class="hover:text-cyan-300">Programs</a>
-      <a href="#workshops" class="hover:text-cyan-300">Workshops</a>
-      <a href="#about" class="hover:text-cyan-300">About</a>
+      <a href="#programs" class="hover:text-cyan-300 transition">Programs</a>
+      <a href="#workshops" class="hover:text-cyan-300 transition">Workshops</a>
+      <a href="#about" class="hover:text-cyan-300 transition">About</a>
     </nav>
   </header>
 
-  <section class="h-screen flex flex-col justify-center items-center text-center">
+  <!-- HERO -->
+  <section class="h-screen flex flex-col justify-center items-center text-center px-6">
     <h2 class="text-6xl md:text-7xl font-extrabold mb-6">Building Future Innovators</h2>
     <p class="max-w-2xl mx-auto text-lg text-gray-300 mb-8">
       Learn robotics, AI, and engineering hands-on with immersive workshops and engaging programs.
@@ -60,6 +64,7 @@
     <a href="#programs" class="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 rounded-full text-black font-bold text-lg shadow-lg transition">Get Started</a>
   </section>
 
+  <!-- PROGRAMS -->
   <section id="programs" class="py-24 px-8">
     <h3 class="text-4xl font-bold mb-12 text-center">Programs</h3>
     <div class="grid md:grid-cols-3 gap-10">
@@ -78,27 +83,29 @@
     </div>
   </section>
 
+  <!-- WORKSHOPS -->
   <section id="workshops" class="py-24 px-8">
     <h3 class="text-4xl font-bold mb-12 text-center">Workshops</h3>
     <div class="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
       <div class="glass p-6 rounded-2xl">
-        <img src="images/img1.jpeg" class="rounded-xl mb-4" alt="Workshop">
+        <img src="https://source.unsplash.com/400x300/?robot" class="rounded-xl mb-4" alt="Workshop">
         <h4 class="text-xl font-bold mb-2">Vision Bots</h4>
         <p>AI-powered bots that see and react to the world.</p>
       </div>
       <div class="glass p-6 rounded-2xl">
-        <img src="images/img2.jpg" class="rounded-xl mb-4" alt="Workshop">
+        <img src="https://source.unsplash.com/400x300/?drone" class="rounded-xl mb-4" alt="Workshop">
         <h4 class="text-xl font-bold mb-2">Autonomous Vehicles</h4>
         <p>Build your own robot car with sensors and navigation.</p>
       </div>
       <div class="glass p-6 rounded-2xl">
-        <img src="images/img3.webp" class="rounded-xl mb-4" alt="Workshop">
+        <img src="https://source.unsplash.com/400x300/?ai" class="rounded-xl mb-4" alt="Workshop">
         <h4 class="text-xl font-bold mb-2">Drone Racing</h4>
         <p>Learn FPV drone skills with coding challenges.</p>
       </div>
     </div>
   </section>
 
+  <!-- ABOUT -->
   <section id="about" class="py-24 px-8 max-w-5xl mx-auto text-center">
     <h3 class="text-4xl font-bold mb-6">About Us</h3>
     <p class="text-gray-300 mb-6">
@@ -112,74 +119,55 @@
   </footer>
 
 <script>
-  // Floating particle background
+  // === PARTICLE BACKGROUND ===
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-  const renderer = new THREE.WebGLRenderer({
-    canvas: document.getElementById("bgCanvas"),
-    alpha: true,
-  });
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({canvas: document.getElementById('bgCanvas'), alpha: true});
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  // Create particle geometry
   const particles = new THREE.BufferGeometry();
   const particleCount = 4000;
   const positions = [];
   for (let i = 0; i < particleCount; i++) {
-    positions.push(
-      (Math.random() - 0.5) * 800,
-      (Math.random() - 0.5) * 800,
-      (Math.random() - 0.5) * 800
-    );
+    positions.push((Math.random() - 0.5) * 800, (Math.random() - 0.5) * 800, (Math.random() - 0.5) * 800);
   }
-  particles.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute(positions, 3)
-  );
-
-  const material = new THREE.PointsMaterial({ color: 0x00ffff, size: 1 });
+  particles.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  const material = new THREE.PointsMaterial({color: 0x00ffff, size: 1});
   const points = new THREE.Points(particles, material);
   scene.add(points);
   camera.position.z = 400;
 
-  // Track only mouse Y movement
   let mouseY = 0;
-  document.addEventListener("mousemove", (event) => {
+  document.addEventListener('mousemove', (event) => {
     mouseY = (event.clientY / window.innerHeight) - 0.5;
   });
 
-  // Animation loop
-function animate() {
-  requestAnimationFrame(animate);
-
-  // Keep normal rotation on Y-axis (auto spin)
-  points.rotation.y += 0.0005;
-
-  // Target tilt from mouse
-  const targetTilt = mouseY * 0.15; // adjust multiplier for stronger/weaker tilt
-
-  // Smoothly move towards target tilt
-  points.rotation.x += (targetTilt - points.rotation.x) * 0.05;
-
-  // Gradually return to center if mouse stops moving
-  if (Math.abs(mouseY) < 0.001) {
-    points.rotation.x *= 0.95; 
+  function animate() {
+    requestAnimationFrame(animate);
+    points.rotation.y += 0.0005;
+    const targetTilt = mouseY * 0.15;
+    points.rotation.x += (targetTilt - points.rotation.x) * 0.05;
+    renderer.render(scene, camera);
   }
-
-  renderer.render(scene, camera);
-}
   animate();
 
-  // Adjust on window resize
-  window.addEventListener("resize", () => {
+  window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // === SCROLL ANIMATIONS ===
+  gsap.utils.toArray("section").forEach((section, i) => {
+    gsap.from(section, {
+      opacity: 0,
+      y: 100,
+      duration: 1,
+      scrollTrigger: {
+        trigger: section,
+        start: "top 80%",
+      }
+    });
   });
 </script>
 </body>
