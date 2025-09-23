@@ -33,7 +33,7 @@
     }
     .glass:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,255,255,0.2);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
     }
     canvas#bgCanvas {
       position: fixed;
@@ -50,9 +50,9 @@
   <header class="fixed top-0 left-0 w-full py-4 px-6 flex flex-col md:flex-row justify-between items-center z-50 space-y-3 md:space-y-0">
     <img src="header.png.png" alt="Robotics Academy" class="h-10 sm:h-12 md:h-14">
     <nav class="space-x-4 md:space-x-6 text-base md:text-lg flex flex-wrap justify-center">
-      <a href="#programs" class="hover:text-cyan-300 transition">Programs</a>
-      <a href="#workshops" class="hover:text-cyan-300 transition">Workshops</a>
-      <a href="#about" class="hover:text-cyan-300 transition">About</a>
+      <a href="#programs" class="hover:text-indigo-300 transition">Programs</a>
+      <a href="#workshops" class="hover:text-indigo-300 transition">Workshops</a>
+      <a href="#about" class="hover:text-indigo-300 transition">About</a>
     </nav>
   </header>
 
@@ -62,7 +62,7 @@
     <p class="max-w-md sm:max-w-2xl mx-auto text-base sm:text-lg text-gray-300 mb-8">
       Learn robotics, AI, and engineering hands-on with immersive workshops and engaging programs.
     </p>
-    <a href="#programs" class="px-6 sm:px-8 py-3 bg-cyan-500 hover:bg-cyan-400 rounded-full text-black font-bold text-base sm:text-lg shadow-lg transition">Get Started</a>
+    <a href="#programs" class="px-6 sm:px-8 py-3 bg-indigo-500 hover:bg-indigo-400 rounded-full text-black font-bold text-base sm:text-lg shadow-lg transition">Get Started</a>
   </section>
 
   <!-- PROGRAMS -->
@@ -70,15 +70,15 @@
     <h3 class="text-3xl sm:text-4xl font-bold mb-12 text-center">Programs</h3>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
       <div class="glass p-6 sm:p-8 rounded-2xl">
-        <h4 class="text-xl sm:text-2xl font-bold mb-4 text-cyan-300">COMING SOON</h4>
+        <h4 class="text-xl sm:text-2xl font-bold mb-4 text-indigo-300">COMING SOON</h4>
         <p></p>
       </div>
       <div id="bootcamp-card" class="glass p-6 sm:p-8 rounded-2xl cursor-pointer">
-        <h4 class="text-xl sm:text-2xl font-bold mb-4 text-cyan-300">AI and Robotics Bootcamp</h4>
+        <h4 class="text-xl sm:text-2xl font-bold mb-4 text-indigo-300">AI and Robotics Bootcamp</h4>
         <p>Dive into AI concepts and create your first intelligent bots.</p>
       </div>
       <div class="glass p-6 sm:p-8 rounded-2xl">
-        <h4 class="text-xl sm:text-2xl font-bold mb-4 text-cyan-300">COMING SOON</h4>
+        <h4 class="text-xl sm:text-2xl font-bold mb-4 text-indigo-300">COMING SOON</h4>
         <p></p>
       </div>
     </div>
@@ -122,7 +122,7 @@ What makes us different? We’re students too! We know the struggles, the confus
 Synertech isn’t just about classes — it’s about building a community of creators and problem-solvers who want to use tech to make a difference. Whether you’re a beginner or already a tech geek, there’s a place for you here.
 
     </p>
-  <a href="https://www.linkedin.com/company/synertechrobotics/about/?viewAsMember=true" class="inline-block mt-4 px-6 sm:px-8 py-3 bg-cyan-500 hover:bg-cyan-400 rounded-full text-black font-bold text-base sm:text-lg">
+  <a href="https://www.linkedin.com/company/synertechrobotics/about/?viewAsMember=true" class="inline-block mt-4 px-6 sm:px-8 py-3 bg-indigo-500 hover:bg-indigo-400 rounded-full text-black font-bold text-base sm:text-lg">
     Join Now
   </a>
   </section>
@@ -134,7 +134,7 @@ Synertech isn’t just about classes — it’s about building a community of cr
   <!-- MODAL -->
   <div id="bootcamp-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center z-50 overflow-y-auto">
     <div class="glass p-6 sm:p-8 rounded-2xl max-w-lg mx-4 relative text-white">
-      <button id="close-modal" class="absolute top-2 right-2 text-3xl text-cyan-300 hover:text-cyan-500 transition">&times;</button>
+      <button id="close-modal" class="absolute top-2 right-2 text-3xl text-indigo-300 hover:text-indigo-500 transition">&times;</button>
       <p class="text-base sm:text-lg">
         Join us for a 7-day hands-on course where you’ll explore the world of technology step by step. Each day is packed with fun activities, interactive sessions, and mini-projects to help you learn by doing. From the basics of coding and problem-solving to exciting topics like robotics, AI, and app development, this bootcamp is designed to spark your creativity and build real skills. By the end of 7 days, you’ll not only understand how technology works but also create something of your own to showcase. Perfect for beginners and curious minds who want to dive into tech in a short, engaging way!
       </p>
@@ -155,7 +155,7 @@ Synertech isn’t just about classes — it’s about building a community of cr
       positions.push((Math.random() - 0.5) * 800, (Math.random() - 0.5) * 800, (Math.random() - 0.5) * 800);
     }
     particles.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    const material = new THREE.PointsMaterial({color: 0x00ffff, size: 1});
+    const material = new THREE.PointsMaterial({color: 0x6366f1, size: 1});
     const points = new THREE.Points(particles, material);
     scene.add(points);
     camera.position.z = 400;
