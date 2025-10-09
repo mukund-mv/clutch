@@ -2,37 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>SynerTech — Transforming the Future of Industry & Innovation</title>
   <link rel="icon" href="Logo.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
   <style>
-    :root{
+    :root {
       --accent: #18a6d8;     /* teal-blue accent */
       --accent-2: #7dd3fc;   /* secondary glow */
       --glass-bg: rgba(255,255,255,0.06);
       --glass-border: rgba(255,255,255,0.12);
       --text-dim: #cbd5e1;
     }
-    html,body{height:100%}
-    body {
+    html, body { 
       margin: 0;
-      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: radial-gradient(ellipse at top, #071028 0%, #11142a 45%, #1f2942 100%);
-      color: #fff;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow-x:hidden;
+      min-height: 100vh; /* Ensure body takes full viewport height */
+      height: 100%;
     }
-
-    /* canvas background fills the screen */
-    canvas#bgCanvas{ position: fixed; inset:0; width:100%; height:100%; z-index:-2; }
-
+    body {
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(ellipse at top, #071028 0%, #11142a 45%, #1f2942 100%) fixed; /* Fixed to prevent repetition */
+      background-size: 100% 100%; /* Stretch gradient to full height */
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      position: relative;
+    }
+    /* Canvas background fills the screen */
+    canvas#bgCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh; /* Use viewport height to ensure coverage */
+      z-index: -2;
+      display: block;
+    }
     /* Glass cards */
     .glass {
       background: var(--glass-bg);
@@ -40,18 +49,21 @@
       border: 1px solid var(--glass-border);
       transition: transform .28s ease, box-shadow .28s ease;
     }
-    .glass:hover{ transform: translateY(-8px); box-shadow: 0 12px 40px rgba(17,34,51,0.45); }
-
-    header{
+    .glass:hover { 
+      transform: translateY(-8px); 
+      box-shadow: 0 12px 40px rgba(17,34,51,0.45); 
+    }
+    header {
       backdrop-filter: blur(6px);
       border-bottom: 1px solid rgba(255,255,255,0.04);
     }
-    header img.logo{ height:44px; }
-
-    h1,h2,h3,h4{ font-family: 'Montserrat', sans-serif; letter-spacing:0.6px; }
-    h1{ font-weight:900 }
-    .muted{ color: var(--text-dim); }
-
+    header img.logo { height: 44px; }
+    h1, h2, h3, h4 { 
+      font-family: 'Montserrat', sans-serif; 
+      letter-spacing: 0.6px; 
+    }
+    h1 { font-weight: 900; }
+    .muted { color: var(--text-dim); }
     /* Hero layout */
     .hero {
       min-height: 88vh;
@@ -63,11 +75,19 @@
       position: relative;
       z-index: 2;
     }
-
     .hero-left { max-width: 720px; }
-    .badge { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background: rgba(255,255,255,0.04); color:var(--accent); font-weight:600; border:1px solid rgba(29,155,240,0.08); }
-
-    /* robot mascots container */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      color: var(--accent);
+      font-weight: 600;
+      border: 1px solid rgba(29,155,240,0.08);
+    }
+    /* Robot mascots container */
     .robots {
       position: relative;
       width: 100%;
@@ -80,6 +100,7 @@
       user-select: none;
       -webkit-user-drag: none;
       filter: drop-shadow(0 18px 40px rgba(0,0,0,0.55));
+      pointer-events: none; /* Prevent touch issues on mobile */
     }
     .robot.left {
       left: -60px;
@@ -93,33 +114,110 @@
       width: 420px;
       transform-origin: 50% 50%;
     }
-
-    /* responsive */
-    @media (max-width: 1024px){
-      .hero { grid-template-columns: 1fr; padding: 48px 28px; min-height: 95vh; grid-auto-rows: auto; }
-      .robots{ order: -1; min-height:420px; display:flex; justify-content:center; align-items:center; }
-      .robot.left{ position:relative; left:auto; top:auto; width:360px; margin-right: -40px; }
-      .robot.right{ position:relative; right:auto; top:auto; width:320px; margin-left:-40px; opacity:0.95 }
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 48px 24px;
+        min-height: auto;
+        grid-auto-rows: auto;
+      }
+      .robots {
+        order: -1;
+        min-height: 320px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .robot.left {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: 280px;
+        margin-right: -30px;
+      }
+      .robot.right {
+        position: relative;
+        right: auto;
+        top: auto;
+        width: 240px;
+        margin-left: -30px;
+        opacity: 0.95;
+      }
+      .hero-left {
+        text-align: center;
+      }
+      .hero-left .mt-8 {
+        justify-content: center;
+      }
     }
-
-    /* sections */
-    section { padding: 72px 48px; }
-    .section-title { font-weight:900; font-size:1.6rem; margin-bottom:16px; color: #e6f7ff; }
-    .card-grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
-
-    /* footer */
-    footer{ padding:28px 48px; background: rgba(0,0,0,0.35); border-top:1px solid rgba(255,255,255,0.03); color:var(--text-dim); }
-
-    /* modal */
-    #bootcamp-modal .glass { max-width:720px; width:calc(100% - 48px); }
-
-    /* small helpers */
-    .pill { background: rgba(255,255,255,0.03); padding:6px 10px; border-radius:999px; font-weight:600; color:var(--text-dim); border:1px solid rgba(255,255,255,0.03); }
+    @media (max-width: 640px) {
+      .hero {
+        padding: 32px 16px;
+      }
+      .robots {
+        min-height: 240px;
+      }
+      .robot.left {
+        width: 200px;
+        margin-right: -20px;
+      }
+      .robot.right {
+        width: 180px;
+        margin-left: -20px;
+      }
+      header .max-w-7xl {
+        flex-direction: column;
+        gap: 16px;
+      }
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+    }
+    /* Sections */
+    section { 
+      padding: 72px 48px; 
+    }
+    .section-title { 
+      font-weight: 900; 
+      font-size: 1.6rem; 
+      margin-bottom: 16px; 
+      color: #e6f7ff; 
+    }
+    .card-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+      gap: 20px; 
+    }
+    /* Footer */
+    footer {
+      padding: 28px 48px;
+      background: rgba(0,0,0,0.35);
+      border-top: 1px solid rgba(255,255,255,0.03);
+      color: var(--text-dim);
+    }
+    /* Modal */
+    #bootcamp-modal .glass { 
+      max-width: 720px; 
+      width: calc(100% - 48px); 
+    }
+    /* Small helpers */
+    .pill {
+      background: rgba(255,255,255,0.03);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      color: var(--text-dim);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
   </style>
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
-
   <!-- NAV -->
   <header class="fixed top-0 left-0 w-full z-50">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -130,7 +228,6 @@
           <div class="text-xs muted">Student-led Tech Education</div>
         </div>
       </div>
-
       <nav class="flex items-center gap-6 text-sm">
         <a href="#workshops" class="muted hover:text-white transition">Workshops</a>
         <a href="#events" class="muted hover:text-white transition">Events</a>
@@ -139,7 +236,6 @@
       </nav>
     </div>
   </header>
-
   <!-- HERO -->
   <main class="hero">
     <div class="hero-left">
@@ -150,20 +246,16 @@
         </svg>
         7-Day Hands-On Workshop — Mid October
       </div>
-
       <h1 class="text-4xl md:text-5xl leading-tight mt-4">
         Transforming the Future of Industry & Innovation
       </h1>
-
       <p class="muted mt-4 max-w-xl">
         SynerTech is a student-led initiative that makes robotics, AI and engineering fun, practical and accessible. Through hands-on workshops, hackathons and guided projects, we empower learners to build real tech and solve real problems.
       </p>
-
       <div class="mt-8 flex gap-4 items-center">
         <button id="join-btn" class="px-6 py-3 rounded-full font-semibold text-black bg-gradient-to-r from-[#7dd3fc] to-[#18a6d8] shadow-lg">Get Started</button>
         <button id="learn-btn" class="px-5 py-3 rounded-full border border-white/6 glass pill">Learn More</button>
       </div>
-
       <div class="mt-8 grid grid-cols-2 gap-3 max-w-md">
         <div class="glass p-4 rounded-2xl">
           <div class="text-sm muted">Mission</div>
@@ -175,21 +267,16 @@
         </div>
       </div>
     </div>
-
-    <!-- robots -->
+    <!-- Robots -->
     <div class="robots glass p-6 rounded-2xl overflow-visible">
-      <!-- left robot (waving/open hand) -->
       <img src="robot hand open.png" alt="SynerTech robot waving" class="robot left" id="robot-left" draggable="false">
-      <!-- right robot (tablet) -->
       <img src="robot with tablet.png" alt="SynerTech robot with tablet" class="robot right" id="robot-right" draggable="false">
     </div>
   </main>
-
   <!-- WORKSHOPS / PROGRAMS -->
   <section id="workshops" class="max-w-7xl mx-auto">
     <h2 class="section-title">Workshops & Programs</h2>
     <p class="muted max-w-3xl">Short, project-based workshops designed to take you from concept to working prototype. Perfect for beginners and intermediate learners who want guided, hands-on experience.</p>
-
     <div class="card-grid mt-8">
       <div class="glass p-6 rounded-2xl">
         <h3 class="font-bold text-lg">7-day Hands-on Bootcamp</h3>
@@ -199,7 +286,6 @@
           <span class="pill">Beginner-friendly</span>
         </div>
       </div>
-
       <div class="glass p-6 rounded-2xl">
         <h3 class="font-bold text-lg">Robotics Hackathon</h3>
         <p class="muted mt-2">Competitive team event to design and program robots for a themed challenge. Learn rapid prototyping & teamwork.</p>
@@ -207,7 +293,6 @@
           <span class="pill">Competitive</span>
         </div>
       </div>
-
       <div class="glass p-6 rounded-2xl">
         <h3 class="font-bold text-lg">AI Labs</h3>
         <p class="muted mt-2">Hands-on sessions on ML basics, computer vision, and embedded inference for small devices.</p>
@@ -217,12 +302,10 @@
       </div>
     </div>
   </section>
-
   <!-- EVENTS / Competitions -->
   <section id="events" class="max-w-7xl mx-auto">
     <h2 class="section-title">Events & Competitions</h2>
     <p class="muted">From showcases to inter-school hackathons — build, present and compete with teams.</p>
-
     <div class="card-grid mt-8">
       <div class="glass p-6 rounded-2xl">
         <img src="3.png" alt="event" class="rounded-lg mb-3 w-full object-cover h-36">
@@ -241,18 +324,15 @@
       </div>
     </div>
   </section>
-
   <!-- ABOUT -->
   <section id="about" class="max-w-4xl mx-auto text-center">
     <h2 class="section-title">About SynerTech</h2>
     <p class="muted max-w-3xl mx-auto">We’re a student-led tech education startup created by learners, for learners — making technology fun, easy to understand, and practical. We run workshops, hackathons, and guided projects to help learners build confident technical skills.</p>
-
     <div class="mt-8 flex items-center justify-center gap-6">
       <a href="https://www.linkedin.com/company/synertechrobotics/about/?viewAsMember=true" class="glass px-4 py-2 rounded-2xl">LinkedIn</a>
       <a href="#" class="glass px-4 py-2 rounded-2xl">Instagram @synertech.official</a>
     </div>
   </section>
-
   <!-- CONTACT -->
   <section id="contact" class="max-w-7xl mx-auto">
     <h2 class="section-title">Contact</h2>
@@ -264,25 +344,23 @@
         <p class="muted mt-1">Instagram: <strong>@synertech.official</strong></p>
       </div>
       <div class="w-full md:w-80">
-        <form id="contact-form" class="space-y-3">
+        <div id="contact-form" class="space-y-3">
           <input required placeholder="Your name" class="w-full p-3 rounded-lg bg-transparent border border-white/6">
           <input type="email" required placeholder="Email" class="w-full p-3 rounded-lg bg-transparent border border-white/6">
           <textarea required placeholder="Message" class="w-full p-3 rounded-lg bg-transparent border border-white/6" rows="4"></textarea>
           <div class="flex justify-end">
             <button type="submit" class="px-4 py-2 rounded-full bg-gradient-to-r from-[#7dd3fc] to-[#18a6d8] font-semibold text-black">Send</button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </section>
-
   <footer>
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="text-sm muted">© 2025 SynerTech. All rights reserved.</div>
       <div class="text-sm muted">Presented by SynerTech • Student-led • Hands-on robotics & AI</div>
     </div>
   </footer>
-
   <!-- BOOTCAMP MODAL -->
   <div id="bootcamp-modal" class="fixed inset-0 hidden z-60 flex items-center justify-center bg-black/60 p-6">
     <div class="glass p-6 rounded-2xl relative text-black bg-white/6" role="dialog" aria-modal="true" aria-labelledby="bootcamp-title">
@@ -303,41 +381,46 @@
       </div>
     </div>
   </div>
-
   <script>
-    // -------------------------
     // 3D Particle background (Three.js)
-    // -------------------------
     const canvas = document.getElementById('bgCanvas');
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 2000);
-    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Cap pixel ratio for performance on mobile
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.position.z = 420;
 
-    // generate points - soft cloud
+    // Generate points - soft cloud
     const particleCount = 3500;
     const positions = new Float32Array(particleCount * 3);
-    for(let i=0;i<particleCount;i++){
-      positions[i*3+0] = (Math.random()-0.5) * 1200;
-      positions[i*3+1] = (Math.random()-0.5) * 900;
-      positions[i*3+2] = (Math.random()-0.5) * 800;
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3 + 0] = (Math.random() - 0.5) * 1200;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 900;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 800;
     }
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
-    const mat = new THREE.PointsMaterial({ size: 1.2, color: 0x7dd3fc, transparent:true, opacity:0.85 });
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const mat = new THREE.PointsMaterial({ size: 1.2, color: 0x7dd3fc, transparent: true, opacity: 0.85 });
     const cloud = new THREE.Points(geometry, mat);
     scene.add(cloud);
 
-    // subtle rotation + parallax
+    // Subtle rotation + parallax
     let mouseX = 0, mouseY = 0;
-    document.addEventListener('mousemove', (e) => {
+    const handleMouseMove = (e) => {
       mouseX = (e.clientX / window.innerWidth) - 0.5;
       mouseY = (e.clientY / window.innerHeight) - 0.5;
-    });
+    };
+    const handleTouchMove = (e) => {
+      if (e.touches.length > 0) {
+        mouseX = (e.touches[0].clientX / window.innerWidth) - 0.5;
+        mouseY = (e.touches[0].clientY / window.innerHeight) - 0.5;
+      }
+    };
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    function animateThree(){
+    function animateThree() {
       requestAnimationFrame(animateThree);
       cloud.rotation.y += 0.0006;
       cloud.rotation.x += (mouseY * 0.08 - cloud.rotation.x) * 0.03;
@@ -346,36 +429,40 @@
     }
     animateThree();
 
+    // Handle resize with debouncing for performance
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth/window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }, 100); // Debounce resize events
     });
 
-    // -------------------------
     // GSAP Animations for robots & sections
-    // -------------------------
     gsap.registerPlugin(ScrollTrigger);
-
-    // float animation for robots
     const left = document.getElementById('robot-left');
     const right = document.getElementById('robot-right');
 
-    gsap.to(left, { y: -14, rotation: 3, duration: 2.8, yoyo:true, repeat: -1, ease: "sine.inOut" });
-    gsap.to(left, { x: -8, duration: 6.5, yoyo:true, repeat:-1, ease: "sine.inOut" });
+    gsap.to(left, { y: -14, rotation: 3, duration: 2.8, yoyo: true, repeat: -1, ease: "sine.inOut" });
+    gsap.to(left, { x: -8, duration: 6.5, yoyo: true, repeat: -1, ease: "sine.inOut" });
+    gsap.to(right, { y: -10, rotation: -3, duration: 3.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
+    gsap.to(right, { x: 6, duration: 5.5, yoyo: true, repeat: -1, ease: "sine.inOut" });
 
-    gsap.to(right, { y: -10, rotation: -3, duration: 3.2, yoyo:true, repeat: -1, ease: "sine.inOut" });
-    gsap.to(right, { x: 6, duration: 5.5, yoyo:true, repeat:-1, ease: "sine.inOut" });
+    // Slight parallax relative to mouse/touch for robots
+    const handleParallax = (e, isTouch = false) => {
+      const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+      const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+      const rx = (clientX / window.innerWidth - 0.5) * 18;
+      const ry = (clientY / window.innerHeight - 0.5) * 14;
+      gsap.to(left, { rotation: 2 + rx * 0.04, x: -8 + rx * 0.6, y: -6 + ry * 0.35, duration: 0.9, ease: "power2.out" });
+      gsap.to(right, { rotation: -2 + rx * 0.02, x: 6 + rx * 0.45, y: 10 + ry * 0.25, duration: 0.9, ease: "power2.out" });
+    };
+    document.addEventListener('mousemove', (e) => handleParallax(e));
+    document.addEventListener('touchmove', (e) => handleParallax(e, true), { passive: true });
 
-    // slight parallax relative to mouse for robots
-    document.addEventListener('mousemove', (e) => {
-      const rx = (e.clientX / window.innerWidth - 0.5) * 18;
-      const ry = (e.clientY / window.innerHeight - 0.5) * 14;
-      gsap.to(left, { rotation: 2 + rx*0.04, x: -8 + rx*0.6, y: -6 + ry*0.35, duration: 0.9, ease: "power2.out" });
-      gsap.to(right, { rotation: -2 + rx*0.02, x: 6 + rx*0.45, y: 10 + ry*0.25, duration: 0.9, ease: "power2.out" });
-    });
-
-    // entry animations for sections
+    // Entry animations for sections
     gsap.utils.toArray("section").forEach((sec, i) => {
       gsap.from(sec, {
         opacity: 0,
@@ -387,11 +474,9 @@
     });
 
     // CTA pulses
-    gsap.to("#join-btn", { scale: 1.03, repeat:-1, yoyo:true, duration:1.6, ease:"sine.inOut" });
+    gsap.to("#join-btn", { scale: 1.03, repeat: -1, yoyo: true, duration: 1.6, ease: "sine.inOut" });
 
-    // -------------------------
     // Modal logic (bootcamp)
-    // -------------------------
     const modal = document.getElementById('bootcamp-modal');
     const openBootcamp = document.getElementById('open-bootcamp');
     const closeModal = document.getElementById('close-modal');
@@ -399,41 +484,44 @@
     const joinBtn = document.getElementById('join-btn');
     const learnBtn = document.getElementById('learn-btn');
 
-    function showModal(){
+    function showModal() {
       modal.classList.remove('hidden');
       modal.style.display = 'flex';
-      gsap.fromTo(modal.querySelector('.glass'), { y:40, opacity:0 }, { y:0, opacity:1, duration:0.45, ease:'power2.out' });
+      gsap.fromTo(modal.querySelector('.glass'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'power2.out' });
     }
-    function hideModal(){
-      gsap.to(modal.querySelector('.glass'), { y:40, opacity:0, duration:0.28, ease:'power2.in', onComplete: () => { modal.style.display='none'; modal.classList.add('hidden'); } });
+    function hideModal() {
+      gsap.to(modal.querySelector('.glass'), { y: 40, opacity: 0, duration: 0.28, ease: 'power2.in', onComplete: () => { 
+        modal.style.display = 'none'; 
+        modal.classList.add('hidden'); 
+      } });
     }
 
-    if(openBootcamp) openBootcamp.addEventListener('click', showModal);
-    joinBtn.addEventListener('click', (e)=>{ e.preventDefault(); showModal(); });
-    learnBtn.addEventListener('click', (e)=>{ e.preventDefault(); document.querySelector('#about').scrollIntoView({behavior:'smooth'}); });
+    if (openBootcamp) openBootcamp.addEventListener('click', showModal);
+    joinBtn.addEventListener('click', (e) => { e.preventDefault(); showModal(); });
+    learnBtn.addEventListener('click', (e) => { e.preventDefault(); document.querySelector('#about').scrollIntoView({ behavior: 'smooth' }); });
 
     closeModal.addEventListener('click', hideModal);
     closeModalCTA.addEventListener('click', hideModal);
-    // hide clicking outside
-    modal.addEventListener('click', (ev) => { if(ev.target === modal) hideModal(); });
+    modal.addEventListener('click', (ev) => { if (ev.target === modal) hideModal(); });
 
-    // contact form (demo)
+    // Contact form (demo)
     const contactForm = document.getElementById('contact-form');
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      // very small demo: show a friendly toast
-      gsap.to({}, { duration: 0.1, onComplete: () => alert('Thanks! We will get back to you soon.') });
-      contactForm.reset();
+    contactForm.addEventListener('click', (e) => {
+      if (e.target.type === 'submit') {
+        e.preventDefault();
+        gsap.to({}, { duration: 0.1, onComplete: () => alert('Thanks! We will get back to you soon.') });
+        contactForm.querySelectorAll('input, textarea').forEach(input => input.value = '');
+      }
     });
 
     // Accessibility: keyboard esc closes modal
     document.addEventListener('keydown', e => {
-      if(e.key === 'Escape' && !modal.classList.contains('hidden')) hideModal();
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) hideModal();
     });
 
     // Preload robot images to avoid flicker
-    [left,right].forEach(img => {
-      if(!img.complete) img.onload = ()=>{};
+    [left, right].forEach(img => {
+      if (!img.complete) img.onload = () => {};
     });
   </script>
 </body>
