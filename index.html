@@ -20,29 +20,27 @@
     }
     html, body { 
       margin: 0;
-      min-height: 100vh; /* Ensure body takes full viewport height */
+      min-height: 100vh;
       height: 100%;
     }
     body {
       font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: radial-gradient(ellipse at top, #071028 0%, #11142a 45%, #1f2942 100%) fixed; /* Fixed to prevent repetition */
-      background-size: 100% 100%; /* Stretch gradient to full height */
+      background: radial-gradient(ellipse at top, #071028 0%, #11142a 45%, #1f2942 100%) fixed;
+      background-size: 100% 100%;
       color: #fff;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
       position: relative;
     }
-    /* Canvas background fills the screen */
     canvas#bgCanvas {
       position: fixed;
       inset: 0;
       width: 100vw;
-      height: 100vh; /* Use viewport height to ensure coverage */
+      height: 100vh;
       z-index: -2;
       display: block;
     }
-    /* Glass cards */
     .glass {
       background: var(--glass-bg);
       backdrop-filter: blur(8px) saturate(1.2);
@@ -64,7 +62,6 @@
     }
     h1 { font-weight: 900; }
     .muted { color: var(--text-dim); }
-    /* Hero layout */
     .hero {
       min-height: 88vh;
       display: grid;
@@ -87,7 +84,6 @@
       font-weight: 600;
       border: 1px solid rgba(29,155,240,0.08);
     }
-    /* Robot mascots container */
     .robots {
       position: relative;
       width: 100%;
@@ -100,7 +96,7 @@
       user-select: none;
       -webkit-user-drag: none;
       filter: drop-shadow(0 18px 40px rgba(0,0,0,0.55));
-      pointer-events: none; /* Prevent touch issues on mobile */
+      pointer-events: none;
     }
     .robot.left {
       left: -60px;
@@ -114,7 +110,6 @@
       width: 420px;
       transform-origin: 50% 50%;
     }
-    /* Responsive adjustments */
     @media (max-width: 1024px) {
       .hero {
         grid-template-columns: 1fr;
@@ -178,7 +173,6 @@
         font-size: 2rem;
       }
     }
-    /* Sections */
     section { 
       padding: 72px 48px; 
     }
@@ -193,19 +187,16 @@
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
       gap: 20px; 
     }
-    /* Footer */
     footer {
       padding: 28px 48px;
       background: rgba(0,0,0,0.35);
       border-top: 1px solid rgba(255,255,255,0.03);
       color: var(--text-dim);
     }
-    /* Modal */
     #bootcamp-modal .glass { 
       max-width: 720px; 
       width: calc(100% - 48px); 
     }
-    /* Small helpers */
     .pill {
       background: rgba(255,255,255,0.03);
       padding: 6px 10px;
@@ -244,7 +235,7 @@
           <path d="M12 2v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M5 22h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        7-Day Hands-On Workshop — Mid October
+        7-Day Hands-On Workshop — Early November
       </div>
       <h1 class="text-4xl md:text-5xl leading-tight mt-4">
         Transforming the Future of Industry & Innovation
@@ -279,6 +270,13 @@
     <p class="muted max-w-3xl">Short, project-based workshops designed to take you from concept to working prototype. Perfect for beginners and intermediate learners who want guided, hands-on experience.</p>
     <div class="card-grid mt-8">
       <div class="glass p-6 rounded-2xl">
+        <h3 class="font-bold text-lg">Cirtified robotics courses</h3>
+        <p class="muted mt-2"></p>
+        <div class="mt-4">
+          <span class="pill">Comming soon!</span>
+        </div>
+      </div>
+      <div class="glass p-6 rounded-2xl">
         <h3 class="font-bold text-lg">7-day Hands-on Bootcamp</h3>
         <p class="muted mt-2">Daily mini-projects, fundamentals of robotics, AI basics, and a final team showcase. Ideal for beginners.</p>
         <div class="mt-4 flex items-center gap-3">
@@ -286,18 +284,12 @@
           <span class="pill">Beginner-friendly</span>
         </div>
       </div>
-      <div class="glass p-6 rounded-2xl">
-        <h3 class="font-bold text-lg">Robotics Hackathon</h3>
-        <p class="muted mt-2">Competitive team event to design and program robots for a themed challenge. Learn rapid prototyping & teamwork.</p>
-        <div class="mt-4">
-          <span class="pill">Competitive</span>
-        </div>
-      </div>
+
       <div class="glass p-6 rounded-2xl">
         <h3 class="font-bold text-lg">AI Labs</h3>
-        <p class="muted mt-2">Hands-on sessions on ML basics, computer vision, and embedded inference for small devices.</p>
+        <p class="muted mt-2"></p>
         <div class="mt-4">
-          <span class="pill">Hands-on</span>
+          <span class="pill">Comming soon!</span>
         </div>
       </div>
     </div>
@@ -309,18 +301,18 @@
     <div class="card-grid mt-8">
       <div class="glass p-6 rounded-2xl">
         <img src="3.png" alt="event" class="rounded-lg mb-3 w-full object-cover h-36">
+        <h4 class="font-bold">COMING SOON</h4>
+        <p class="muted mt-2"></p>
+      </div>
+      <div class="glass p-6 rounded-2xl">
+        <img src="3.png" alt="event" class="rounded-lg mb-3 w-full object-cover h-36">
         <h4 class="font-bold">Robotics Hackathon</h4>
-        <p class="muted mt-2">Collaborative design & programming challenge.</p>
+        <p class="muted mt-2">COMING SOON</p>
       </div>
       <div class="glass p-6 rounded-2xl">
         <img src="3.png" alt="event" class="rounded-lg mb-3 w-full object-cover h-36">
-        <h4 class="font-bold">Project Showcase</h4>
-        <p class="muted mt-2">Present your projects to industry mentors.</p>
-      </div>
-      <div class="glass p-6 rounded-2xl">
-        <img src="3.png" alt="event" class="rounded-lg mb-3 w-full object-cover h-36">
-        <h4 class="font-bold">Workshops Series</h4>
-        <p class="muted mt-2">Weekend deep-dives into specific tools & topics.</p>
+        <h4 class="font-bold">COMING SOON</h4>
+        <p class="muted mt-2"></p>
       </div>
     </div>
   </section>
@@ -340,7 +332,7 @@
       <div class="flex-1">
         <h4 class="font-bold">Get in touch</h4>
         <p class="muted mt-2">Phone: <strong>+91 83105-36603</strong></p>
-        <p class="muted mt-1">Email: <strong>synertech@example.com</strong></p>
+        <p class="muted mt-1">Email: <strong>synertech0@gmail.com</strong></p>
         <p class="muted mt-1">Instagram: <strong>@synertech.official</strong></p>
       </div>
       <div class="w-full md:w-80">
@@ -387,7 +379,7 @@
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Cap pixel ratio for performance on mobile
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.position.z = 420;
 
@@ -429,7 +421,7 @@
     }
     animateThree();
 
-    // Handle resize with debouncing for performance
+    // Handle resize with debouncing
     let resizeTimeout;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
@@ -437,30 +429,45 @@
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-      }, 100); // Debounce resize events
+      }, 100);
     });
 
     // GSAP Animations for robots & sections
     gsap.registerPlugin(ScrollTrigger);
     const left = document.getElementById('robot-left');
     const right = document.getElementById('robot-right');
+    const robotsContainer = document.querySelector('.robots');
 
-    gsap.to(left, { y: -14, rotation: 3, duration: 2.8, yoyo: true, repeat: -1, ease: "sine.inOut" });
+    // Define base animations
+    const leftFloat = gsap.to(left, { y: -14, rotation: 3, duration: 2.8, yoyo: true, repeat: -1, ease: "sine.inOut" });
     gsap.to(left, { x: -8, duration: 6.5, yoyo: true, repeat: -1, ease: "sine.inOut" });
-    gsap.to(right, { y: -10, rotation: -3, duration: 3.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
+    const rightFloat = gsap.to(right, { y: -10, rotation: -3, duration: 3.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
     gsap.to(right, { x: 6, duration: 5.5, yoyo: true, repeat: -1, ease: "sine.inOut" });
 
-    // Slight parallax relative to mouse/touch for robots
+    // Parallax effect on mousemove/touchmove
     const handleParallax = (e, isTouch = false) => {
       const clientX = isTouch ? e.touches[0].clientX : e.clientX;
       const clientY = isTouch ? e.touches[0].clientY : e.clientY;
       const rx = (clientX / window.innerWidth - 0.5) * 18;
       const ry = (clientY / window.innerHeight - 0.5) * 14;
+      // Pause base animations during parallax
+      leftFloat.pause();
+      rightFloat.pause();
       gsap.to(left, { rotation: 2 + rx * 0.04, x: -8 + rx * 0.6, y: -6 + ry * 0.35, duration: 0.9, ease: "power2.out" });
       gsap.to(right, { rotation: -2 + rx * 0.02, x: 6 + rx * 0.45, y: 10 + ry * 0.25, duration: 0.9, ease: "power2.out" });
     };
-    document.addEventListener('mousemove', (e) => handleParallax(e));
-    document.addEventListener('touchmove', (e) => handleParallax(e, true), { passive: true });
+
+    // Reset to base animations on mouseleave
+    const resetRobots = () => {
+      leftFloat.resume();
+      rightFloat.resume();
+      gsap.to(left, { rotation: 3, x: -8, y: -14, duration: 0.9, ease: "power2.out" });
+      gsap.to(right, { rotation: -3, x: 6, y: -10, duration: 0.9, ease: "power2.out" });
+    };
+
+    robotsContainer.addEventListener('mousemove', (e) => handleParallax(e));
+    robotsContainer.addEventListener('touchmove', (e) => handleParallax(e, true), { passive: true });
+    robotsContainer.addEventListener('mouseleave', resetRobots);
 
     // Entry animations for sections
     gsap.utils.toArray("section").forEach((sec, i) => {
