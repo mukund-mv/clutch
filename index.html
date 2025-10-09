@@ -1,217 +1,439 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Robotics Academy</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SynerTech — Transforming the Future of Industry & Innovation</title>
   <link rel="icon" href="Logo.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
   <style>
+    :root{
+      --accent: #18a6d8;     /* teal-blue accent */
+      --accent-2: #7dd3fc;   /* secondary glow */
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --text-dim: #cbd5e1;
+    }
+    html,body{height:100%}
     body {
-      font-family: 'Inter', sans-serif;
-      background: radial-gradient(ellipse at top, #0b0d2c, #16193d, #323556);
-      color: white;
-      overflow-x: hidden;
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(ellipse at top, #071028 0%, #11142a 45%, #1f2942 100%);
+      color: #fff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
     }
-    h1, h2, h3, h4 {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 900;
-      letter-spacing: 1px;
-    }
-    header, #workshops {
-      background: rgba(0, 0, 0, 0.45);
-    }
+
+    /* canvas background fills the screen */
+    canvas#bgCanvas{ position: fixed; inset:0; width:100%; height:100%; z-index:-2; }
+
+    /* Glass cards */
     .glass {
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: var(--glass-bg);
+      backdrop-filter: blur(8px) saturate(1.2);
+      border: 1px solid var(--glass-border);
+      transition: transform .28s ease, box-shadow .28s ease;
     }
-    .glass:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(125, 211, 252, 0.2);
+    .glass:hover{ transform: translateY(-8px); box-shadow: 0 12px 40px rgba(17,34,51,0.45); }
+
+    header{
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
-    canvas#bgCanvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
+    header img.logo{ height:44px; }
+
+    h1,h2,h3,h4{ font-family: 'Montserrat', sans-serif; letter-spacing:0.6px; }
+    h1{ font-weight:900 }
+    .muted{ color: var(--text-dim); }
+
+    /* Hero layout */
+    .hero {
+      min-height: 88vh;
+      display: grid;
+      grid-template-columns: 1fr 520px;
+      gap: 48px;
+      align-items: center;
+      padding: 72px 48px;
+      position: relative;
+      z-index: 2;
     }
+
+    .hero-left { max-width: 720px; }
+    .badge { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background: rgba(255,255,255,0.04); color:var(--accent); font-weight:600; border:1px solid rgba(29,155,240,0.08); }
+
+    /* robot mascots container */
+    .robots {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 520px;
+    }
+    .robot {
+      position: absolute;
+      will-change: transform, opacity;
+      user-select: none;
+      -webkit-user-drag: none;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,0.55));
+    }
+    .robot.left {
+      left: -60px;
+      top: 20px;
+      width: 520px;
+      transform-origin: 50% 50%;
+    }
+    .robot.right {
+      right: -60px;
+      top: 120px;
+      width: 420px;
+      transform-origin: 50% 50%;
+    }
+
+    /* responsive */
+    @media (max-width: 1024px){
+      .hero { grid-template-columns: 1fr; padding: 48px 28px; min-height: 95vh; grid-auto-rows: auto; }
+      .robots{ order: -1; min-height:420px; display:flex; justify-content:center; align-items:center; }
+      .robot.left{ position:relative; left:auto; top:auto; width:360px; margin-right: -40px; }
+      .robot.right{ position:relative; right:auto; top:auto; width:320px; margin-left:-40px; opacity:0.95 }
+    }
+
+    /* sections */
+    section { padding: 72px 48px; }
+    .section-title { font-weight:900; font-size:1.6rem; margin-bottom:16px; color: #e6f7ff; }
+    .card-grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+
+    /* footer */
+    footer{ padding:28px 48px; background: rgba(0,0,0,0.35); border-top:1px solid rgba(255,255,255,0.03); color:var(--text-dim); }
+
+    /* modal */
+    #bootcamp-modal .glass { max-width:720px; width:calc(100% - 48px); }
+
+    /* small helpers */
+    .pill { background: rgba(255,255,255,0.03); padding:6px 10px; border-radius:999px; font-weight:600; color:var(--text-dim); border:1px solid rgba(255,255,255,0.03); }
   </style>
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
 
-  <!-- NAVBAR -->
-  <header class="fixed top-0 left-0 w-full py-4 px-6 flex flex-col md:flex-row justify-between items-center z-50 space-y-3 md:space-y-0">
-    <img src="header.png.png" alt="Robotics Academy" class="h-10 sm:h-12 md:h-14">
-    <nav class="space-x-4 md:space-x-6 text-base md:text-lg flex flex-wrap justify-center">
-      <a href="#programs" class="hover:text-blue-200 transition">Programs</a>
-      <a href="#workshops" class="hover:text-blue-200 transition">Workshops</a>
-      <a href="#about" class="hover:text-blue-200 transition">About</a>
-    </nav>
+  <!-- NAV -->
+  <header class="fixed top-0 left-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <img src="header.png.png" alt="SynerTech logo" class="logo">
+        <div>
+          <div class="text-sm font-semibold">SynerTech</div>
+          <div class="text-xs muted">Student-led Tech Education</div>
+        </div>
+      </div>
+
+      <nav class="flex items-center gap-6 text-sm">
+        <a href="#workshops" class="muted hover:text-white transition">Workshops</a>
+        <a href="#events" class="muted hover:text-white transition">Events</a>
+        <a href="#about" class="muted hover:text-white transition">About</a>
+        <a href="#contact" class="inline-block px-4 py-2 bg-white/8 hover:bg-white/12 rounded-full text-white font-semibold">Join Now</a>
+      </nav>
+    </div>
   </header>
 
   <!-- HERO -->
-  <section class="h-screen flex flex-col justify-center items-center text-center px-4">
-    <h2 class="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 leading-tight">Building Future Innovators</h2>
-    <p class="max-w-md sm:max-w-2xl mx-auto text-base sm:text-lg text-gray-300 mb-8">
-      Learn robotics, AI, and engineering hands-on with immersive workshops and engaging programs.
-    </p>
-    <a href="#programs" class="px-6 sm:px-8 py-3 bg-blue-400 hover:bg-blue-300 rounded-full text-black font-bold text-base sm:text-lg shadow-lg transition">Get Started</a>
-  </section>
+  <main class="hero">
+    <div class="hero-left">
+      <div class="badge mb-4">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M12 2v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 22h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        7-Day Hands-On Workshop — Mid October
+      </div>
 
-  <!-- PROGRAMS -->
-  <section id="programs" class="py-20 sm:py-24 px-4 sm:px-8">
-    <h3 class="text-3xl sm:text-4xl font-bold mb-12 text-center">Programs</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
-      <div class="glass p-6 sm:p-8 rounded-2xl">
-        <h4 class="text-xl sm:text-2xl font-bold mb-4 text-blue-200">COMING SOON</h4>
-        <p></p>
+      <h1 class="text-4xl md:text-5xl leading-tight mt-4">
+        Transforming the Future of Industry & Innovation
+      </h1>
+
+      <p class="muted mt-4 max-w-xl">
+        SynerTech is a student-led initiative that makes robotics, AI and engineering fun, practical and accessible. Through hands-on workshops, hackathons and guided projects, we empower learners to build real tech and solve real problems.
+      </p>
+
+      <div class="mt-8 flex gap-4 items-center">
+        <button id="join-btn" class="px-6 py-3 rounded-full font-semibold text-black bg-gradient-to-r from-[#7dd3fc] to-[#18a6d8] shadow-lg">Get Started</button>
+        <button id="learn-btn" class="px-5 py-3 rounded-full border border-white/6 glass pill">Learn More</button>
       </div>
-      <div id="bootcamp-card" class="glass p-6 sm:p-8 rounded-2xl cursor-pointer">
-        <h4 class="text-xl sm:text-2xl font-bold mb-4 text-blue-200">AI and Robotics Bootcamp</h4>
-        <p>Dive into AI concepts and create your first intelligent bots.</p>
+
+      <div class="mt-8 grid grid-cols-2 gap-3 max-w-md">
+        <div class="glass p-4 rounded-2xl">
+          <div class="text-sm muted">Mission</div>
+          <div class="font-semibold mt-1">Make tech simple, fun & practical</div>
+        </div>
+        <div class="glass p-4 rounded-2xl">
+          <div class="text-sm muted">Contact</div>
+          <div class="font-semibold mt-1">+91 83105-36603</div>
+        </div>
       </div>
-      <div class="glass p-6 sm:p-8 rounded-2xl">
-        <h4 class="text-xl sm:text-2xl font-bold mb-4 text-blue-200">COMING SOON</h4>
-        <p></p>
+    </div>
+
+    <!-- robots -->
+    <div class="robots glass p-6 rounded-2xl overflow-visible">
+      <!-- left robot (waving/open hand) -->
+      <img src="robot hand open.png" alt="SynerTech robot waving" class="robot left" id="robot-left" draggable="false">
+      <!-- right robot (tablet) -->
+      <img src="robot with tablet.png" alt="SynerTech robot with tablet" class="robot right" id="robot-right" draggable="false">
+    </div>
+  </main>
+
+  <!-- WORKSHOPS / PROGRAMS -->
+  <section id="workshops" class="max-w-7xl mx-auto">
+    <h2 class="section-title">Workshops & Programs</h2>
+    <p class="muted max-w-3xl">Short, project-based workshops designed to take you from concept to working prototype. Perfect for beginners and intermediate learners who want guided, hands-on experience.</p>
+
+    <div class="card-grid mt-8">
+      <div class="glass p-6 rounded-2xl">
+        <h3 class="font-bold text-lg">7-day Hands-on Bootcamp</h3>
+        <p class="muted mt-2">Daily mini-projects, fundamentals of robotics, AI basics, and a final team showcase. Ideal for beginners.</p>
+        <div class="mt-4 flex items-center gap-3">
+          <button class="px-4 py-2 rounded-full bg-gradient-to-r from-[#7dd3fc] to-[#18a6d8] font-semibold text-black" id="open-bootcamp">Join Bootcamp</button>
+          <span class="pill">Beginner-friendly</span>
+        </div>
+      </div>
+
+      <div class="glass p-6 rounded-2xl">
+        <h3 class="font-bold text-lg">Robotics Hackathon</h3>
+        <p class="muted mt-2">Competitive team event to design and program robots for a themed challenge. Learn rapid prototyping & teamwork.</p>
+        <div class="mt-4">
+          <span class="pill">Competitive</span>
+        </div>
+      </div>
+
+      <div class="glass p-6 rounded-2xl">
+        <h3 class="font-bold text-lg">AI Labs</h3>
+        <p class="muted mt-2">Hands-on sessions on ML basics, computer vision, and embedded inference for small devices.</p>
+        <div class="mt-4">
+          <span class="pill">Hands-on</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- WORKSHOPS -->
-  <section id="workshops" class="py-20 sm:py-24 px-4 sm:px-8">
-    <h3 class="text-3xl sm:text-4xl font-bold mb-12 text-center">Competitions</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10 max-w-7xl mx-auto">
-      <div class="glass p-4 sm:p-6 rounded-2xl">
-        <img src="3.png" class="rounded-xl mb-4 w-full" alt="Workshop">
-        <h4 class="text-lg sm:text-xl font-bold mb-2">COMING SOON</h4>
-        <p></p>
+  <!-- EVENTS / Competitions -->
+  <section id="events" class="max-w-7xl mx-auto">
+    <h2 class="section-title">Events & Competitions</h2>
+    <p class="muted">From showcases to inter-school hackathons — build, present and compete with teams.</p>
+
+    <div class="card-grid mt-8">
+      <div class="glass p-6 rounded-2xl">
+        <img src="3.png" alt="event" class="rounded-lg mb-3 w-full object-cover h-36">
+        <h4 class="font-bold">Robotics Hackathon</h4>
+        <p class="muted mt-2">Collaborative design & programming challenge.</p>
       </div>
-      <div class="glass p-4 sm:p-6 rounded-2xl">
-        <img src="3.png" class="rounded-xl mb-4 w-full" alt="Workshop">
-        <h4 class="text-lg sm:text-xl font-bold mb-2">Robotics Hackathon</h4>
-        <p>A fun and competitive robotics hackathon coming soon</p>
+      <div class="glass p-6 rounded-2xl">
+        <img src="3.png" alt="event" class="rounded-lg mb-3 w-full object-cover h-36">
+        <h4 class="font-bold">Project Showcase</h4>
+        <p class="muted mt-2">Present your projects to industry mentors.</p>
       </div>
-      <div class="glass p-4 sm:p-6 rounded-2xl">
-        <img src="3.png" class="rounded-xl mb-4 w-full" alt="Workshop">
-        <h4 class="text-lg sm:text-xl font-bold mb-2">COMING SOON</h4>
-        <p></p>
+      <div class="glass p-6 rounded-2xl">
+        <img src="3.png" alt="event" class="rounded-lg mb-3 w-full object-cover h-36">
+        <h4 class="font-bold">Workshops Series</h4>
+        <p class="muted mt-2">Weekend deep-dives into specific tools & topics.</p>
       </div>
     </div>
   </section>
 
   <!-- ABOUT -->
-  <section id="about" class="py-20 sm:py-24 px-4 sm:px-8 max-w-3xl sm:max-w-5xl mx-auto text-center">
-    <h3 class="text-3xl sm:text-4xl font-bold mb-6">About Us</h3>
-    <p class="text-gray-300 mb-6 text-base sm:text-lg">
-      We’re a student-led tech education startup created by learners, for learners. Our goal is simple: to make technology fun, easy to understand, and something you can actually use to create cool stuff.
-    </p>
-      <p class="text-gray-300 mb-6 text-base sm:text-lg"></p>
-At Synertech, we believe learning tech shouldn’t feel boring or complicated. That’s why we run workshops, projects, and sessions where you get to explore coding, robotics, AI, and more in a hands-on way. Think of it as learning by doing, not just listening.
-</p>    
-<p class="text-gray-300 mb-6 text-base sm:text-lg"></p>
-What makes us different? We’re students too! We know the struggles, the confusion, and the excitement of discovering new skills. That’s why we keep things friendly, interactive, and always open to your ideas.
-</p>    
-<p class="text-gray-300 mb-6 text-base sm:text-lg"></p>
-Synertech isn’t just about classes — it’s about building a community of creators and problem-solvers who want to use tech to make a difference. Whether you’re a beginner or already a tech geek, there’s a place for you here.
+  <section id="about" class="max-w-4xl mx-auto text-center">
+    <h2 class="section-title">About SynerTech</h2>
+    <p class="muted max-w-3xl mx-auto">We’re a student-led tech education startup created by learners, for learners — making technology fun, easy to understand, and practical. We run workshops, hackathons, and guided projects to help learners build confident technical skills.</p>
 
-    </p>
-  <a href="https://www.linkedin.com/company/synertechrobotics/about/?viewAsMember=true" class="inline-block mt-4 px-6 sm:px-8 py-3 bg-blue-400 hover:bg-blue-300 rounded-full text-black font-bold text-base sm:text-lg">
-    Join Now
-  </a>
+    <div class="mt-8 flex items-center justify-center gap-6">
+      <a href="https://www.linkedin.com/company/synertechrobotics/about/?viewAsMember=true" class="glass px-4 py-2 rounded-2xl">LinkedIn</a>
+      <a href="#" class="glass px-4 py-2 rounded-2xl">Instagram @synertech.official</a>
+    </div>
   </section>
 
-  <footer class="py-6 text-center text-gray-400 bg-black/60 text-sm sm:text-base">
-    © 2025 Robotics Academy. All rights reserved.
+  <!-- CONTACT -->
+  <section id="contact" class="max-w-7xl mx-auto">
+    <h2 class="section-title">Contact</h2>
+    <div class="glass p-6 rounded-2xl flex flex-col md:flex-row items-start gap-6">
+      <div class="flex-1">
+        <h4 class="font-bold">Get in touch</h4>
+        <p class="muted mt-2">Phone: <strong>+91 83105-36603</strong></p>
+        <p class="muted mt-1">Email: <strong>synertech@example.com</strong></p>
+        <p class="muted mt-1">Instagram: <strong>@synertech.official</strong></p>
+      </div>
+      <div class="w-full md:w-80">
+        <form id="contact-form" class="space-y-3">
+          <input required placeholder="Your name" class="w-full p-3 rounded-lg bg-transparent border border-white/6">
+          <input type="email" required placeholder="Email" class="w-full p-3 rounded-lg bg-transparent border border-white/6">
+          <textarea required placeholder="Message" class="w-full p-3 rounded-lg bg-transparent border border-white/6" rows="4"></textarea>
+          <div class="flex justify-end">
+            <button type="submit" class="px-4 py-2 rounded-full bg-gradient-to-r from-[#7dd3fc] to-[#18a6d8] font-semibold text-black">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-sm muted">© 2025 SynerTech. All rights reserved.</div>
+      <div class="text-sm muted">Presented by SynerTech • Student-led • Hands-on robotics & AI</div>
+    </div>
   </footer>
 
-  <!-- MODAL -->
-  <div id="bootcamp-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center z-50 overflow-y-auto">
-    <div class="glass p-6 sm:p-8 rounded-2xl max-w-lg mx-4 relative text-white">
-      <button id="close-modal" class="absolute top-2 right-2 text-3xl text-blue-200 hover:text-blue-300 transition">&times;</button>
-      <p class="text-base sm:text-lg">
-        Join us for a 7-day hands-on course where you’ll explore the world of technology step by step. Each day is packed with fun activities, interactive sessions, and mini-projects to help you learn by doing. From the basics of coding and problem-solving to exciting topics like robotics, AI, and app development, this bootcamp is designed to spark your creativity and build real skills. By the end of 7 days, you’ll not only understand how technology works but also create something of your own to showcase. Perfect for beginners and curious minds who want to dive into tech in a short, engaging way!
+  <!-- BOOTCAMP MODAL -->
+  <div id="bootcamp-modal" class="fixed inset-0 hidden z-60 flex items-center justify-center bg-black/60 p-6">
+    <div class="glass p-6 rounded-2xl relative text-black bg-white/6" role="dialog" aria-modal="true" aria-labelledby="bootcamp-title">
+      <button id="close-modal" aria-label="Close" class="absolute top-3 right-4 text-3xl text-blue-200 hover:text-blue-300 transition">&times;</button>
+      <h3 id="bootcamp-title" class="text-xl font-bold text-white">7-day SynerTech Bootcamp</h3>
+      <p class="muted mt-3 text-white/90">
+        Join us for a 7-day, hands-on bootcamp where each day includes micro-projects that teach coding, electronics, robotics fundamentals, and a final team showcase. Designed for beginners and curious minds — by the end you’ll have a miniature project to demo.
       </p>
+      <ul class="mt-4 text-sm muted list-disc list-inside">
+        <li>Daily guided tutorials & mini-projects</li>
+        <li>Hardware basics: sensors, motors, microcontrollers</li>
+        <li>Intro to AI & simple perception projects</li>
+        <li>Team showcase & feedback from mentors</li>
+      </ul>
+      <div class="mt-6 flex justify-end gap-3">
+        <a href="#contact" class="px-4 py-2 rounded-full pill">Contact to Register</a>
+        <button id="close-modal-cta" class="px-4 py-2 rounded-full bg-gradient-to-r from-[#7dd3fc] to-[#18a6d8] font-semibold text-black">Got it</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // === PARTICLE BACKGROUND ===
+    // -------------------------
+    // 3D Particle background (Three.js)
+    // -------------------------
+    const canvas = document.getElementById('bgCanvas');
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({canvas: document.getElementById('bgCanvas'), alpha: true});
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 2000);
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.position.z = 420;
 
-    const particles = new THREE.BufferGeometry();
-    const particleCount = 4000;
-    const positions = [];
-    for (let i = 0; i < particleCount; i++) {
-      positions.push((Math.random() - 0.5) * 800, (Math.random() - 0.5) * 800, (Math.random() - 0.5) * 800);
+    // generate points - soft cloud
+    const particleCount = 3500;
+    const positions = new Float32Array(particleCount * 3);
+    for(let i=0;i<particleCount;i++){
+      positions[i*3+0] = (Math.random()-0.5) * 1200;
+      positions[i*3+1] = (Math.random()-0.5) * 900;
+      positions[i*3+2] = (Math.random()-0.5) * 800;
     }
-    particles.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    const material = new THREE.PointsMaterial({color: 0x7dd3fc, size: 1});
-    const points = new THREE.Points(particles, material);
-    scene.add(points);
-    camera.position.z = 400;
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
+    const mat = new THREE.PointsMaterial({ size: 1.2, color: 0x7dd3fc, transparent:true, opacity:0.85 });
+    const cloud = new THREE.Points(geometry, mat);
+    scene.add(cloud);
 
-    let mouseY = 0;
-    document.addEventListener('mousemove', (event) => {
-      mouseY = (event.clientY / window.innerHeight) - 0.5;
+    // subtle rotation + parallax
+    let mouseX = 0, mouseY = 0;
+    document.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth) - 0.5;
+      mouseY = (e.clientY / window.innerHeight) - 0.5;
     });
 
-    function animate() {
-      requestAnimationFrame(animate);
-      points.rotation.y += 0.0005;
-      const targetTilt = mouseY * 0.15;
-      points.rotation.x += (targetTilt - points.rotation.x) * 0.05;
+    function animateThree(){
+      requestAnimationFrame(animateThree);
+      cloud.rotation.y += 0.0006;
+      cloud.rotation.x += (mouseY * 0.08 - cloud.rotation.x) * 0.03;
+      cloud.rotation.z += (mouseX * 0.06 - cloud.rotation.z) * 0.02;
       renderer.render(scene, camera);
     }
-    animate();
+    animateThree();
 
     window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.aspect = window.innerWidth/window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // === SCROLL ANIMATIONS ===
-    gsap.utils.toArray("section").forEach((section, i) => {
-      gsap.from(section, {
+    // -------------------------
+    // GSAP Animations for robots & sections
+    // -------------------------
+    gsap.registerPlugin(ScrollTrigger);
+
+    // float animation for robots
+    const left = document.getElementById('robot-left');
+    const right = document.getElementById('robot-right');
+
+    gsap.to(left, { y: -14, rotation: 3, duration: 2.8, yoyo:true, repeat: -1, ease: "sine.inOut" });
+    gsap.to(left, { x: -8, duration: 6.5, yoyo:true, repeat:-1, ease: "sine.inOut" });
+
+    gsap.to(right, { y: -10, rotation: -3, duration: 3.2, yoyo:true, repeat: -1, ease: "sine.inOut" });
+    gsap.to(right, { x: 6, duration: 5.5, yoyo:true, repeat:-1, ease: "sine.inOut" });
+
+    // slight parallax relative to mouse for robots
+    document.addEventListener('mousemove', (e) => {
+      const rx = (e.clientX / window.innerWidth - 0.5) * 18;
+      const ry = (e.clientY / window.innerHeight - 0.5) * 14;
+      gsap.to(left, { rotation: 2 + rx*0.04, x: -8 + rx*0.6, y: -6 + ry*0.35, duration: 0.9, ease: "power2.out" });
+      gsap.to(right, { rotation: -2 + rx*0.02, x: 6 + rx*0.45, y: 10 + ry*0.25, duration: 0.9, ease: "power2.out" });
+    });
+
+    // entry animations for sections
+    gsap.utils.toArray("section").forEach((sec, i) => {
+      gsap.from(sec, {
         opacity: 0,
-        y: 100,
-        duration: 1,
-        scrollTrigger: {
-          trigger: section,
-          start: "top 80%",
-        }
+        y: 40,
+        duration: 0.9,
+        ease: "power2.out",
+        scrollTrigger: { trigger: sec, start: "top 85%" }
       });
     });
 
-    // === MODAL FUNCTIONALITY ===
-    const bootcampCard = document.getElementById('bootcamp-card');
+    // CTA pulses
+    gsap.to("#join-btn", { scale: 1.03, repeat:-1, yoyo:true, duration:1.6, ease:"sine.inOut" });
+
+    // -------------------------
+    // Modal logic (bootcamp)
+    // -------------------------
     const modal = document.getElementById('bootcamp-modal');
+    const openBootcamp = document.getElementById('open-bootcamp');
     const closeModal = document.getElementById('close-modal');
+    const closeModalCTA = document.getElementById('close-modal-cta');
+    const joinBtn = document.getElementById('join-btn');
+    const learnBtn = document.getElementById('learn-btn');
 
-    bootcampCard.addEventListener('click', () => {
+    function showModal(){
       modal.classList.remove('hidden');
-      gsap.fromTo(modal, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+      modal.style.display = 'flex';
+      gsap.fromTo(modal.querySelector('.glass'), { y:40, opacity:0 }, { y:0, opacity:1, duration:0.45, ease:'power2.out' });
+    }
+    function hideModal(){
+      gsap.to(modal.querySelector('.glass'), { y:40, opacity:0, duration:0.28, ease:'power2.in', onComplete: () => { modal.style.display='none'; modal.classList.add('hidden'); } });
+    }
+
+    if(openBootcamp) openBootcamp.addEventListener('click', showModal);
+    joinBtn.addEventListener('click', (e)=>{ e.preventDefault(); showModal(); });
+    learnBtn.addEventListener('click', (e)=>{ e.preventDefault(); document.querySelector('#about').scrollIntoView({behavior:'smooth'}); });
+
+    closeModal.addEventListener('click', hideModal);
+    closeModalCTA.addEventListener('click', hideModal);
+    // hide clicking outside
+    modal.addEventListener('click', (ev) => { if(ev.target === modal) hideModal(); });
+
+    // contact form (demo)
+    const contactForm = document.getElementById('contact-form');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // very small demo: show a friendly toast
+      gsap.to({}, { duration: 0.1, onComplete: () => alert('Thanks! We will get back to you soon.') });
+      contactForm.reset();
     });
 
-    closeModal.addEventListener('click', () => {
-      gsap.to(modal, { opacity: 0, y: 50, duration: 0.3, ease: 'power2.in', onComplete: () => modal.classList.add('hidden') });
+    // Accessibility: keyboard esc closes modal
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && !modal.classList.contains('hidden')) hideModal();
     });
 
-    // Close modal when clicking outside the content
-    modal.addEventListener('click', (event) => {
-      if (event.target === modal) {
-        gsap.to(modal, { opacity: 0, y: 50, duration: 0.3, ease: 'power2.in', onComplete: () => modal.classList.add('hidden') });
-      }
+    // Preload robot images to avoid flicker
+    [left,right].forEach(img => {
+      if(!img.complete) img.onload = ()=>{};
     });
   </script>
 </body>
